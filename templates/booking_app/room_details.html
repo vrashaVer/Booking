@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Room number: {{ room.number }}</h1>
+    <p>Capacity: {{ room.capacity }}</p>
+    <p>Price: {{ room.price }}</p>
+
+    {% if room.is_available %}
+        <p>Status: Available</p>
+        <a href="{% url 'book_room' %}?room_id={{ room.id }}">Book this room</a>
+    {% else %}
+        <p>Status: Not Available</p>
+    {% endif %}
+
+{% endblock %}

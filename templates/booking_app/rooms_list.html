@@ -1,15 +1,37 @@
 {% extends "base.html" %}
 {% block content %}
+        <h1>Available Rooms</h1>
+
+        <form method="get" action="{% url 'rooms_list' %}">
+            <label for="start_time">Start Date:</label>
+            <input type="datetime-local" id="start_time" name="start_time" value="{{ start_time }}" required>
+        
+            <label for="end_time">End Date:</label>
+            <input type="datetime-local" id="end_time" name="end_time" value="{{ end_time }}" required>
+        
+            <button type="submit">Filter</button>
+            <br>
+            <a href="{% url 'rooms_list' %}?filter=all&start_time={{ start_time }}&end_time={{ end_time }}">Show All Rooms</a> |
+            <a href="{% url 'rooms_list' %}?filter=available&start_time={{ start_time }}&end_time={{ end_time }}">Show Available Rooms</a>
+        </form>
+
+
+        <h2>Room List</h2>
+        <ul>
+            {% for room in rooms_list %}
+                <li>
+                    Room {{ room.number }} - 
+                    {% if room.is_available %}
+                        <span style="color: green;">Available</span>
+                    {% else %}
+                        <span style="color: red;">Occupied</span>
+                    {% endif %}
+                    <a href="{% url 'room_details' room_id=room.id %}">Details</a>
+                </li>
+            {% endfor %}
+        </ul>
+        {% if not rooms_list %}
+            <p>No rooms available for the selected period.</p>
+        {% endif %}
     
-    {% for room in rooms_list%}
-        <h1>
-            Room №{{room.number}}
-        </h1>
-        <h2>
-            Capacity: {{room.capacity}}
-        </h2>
-        <p>
-            Location: {{room.location}}
-        </p>
-    {% endfor %}
 {% endblock %}

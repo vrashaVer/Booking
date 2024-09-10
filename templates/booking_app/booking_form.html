@@ -1,20 +1,25 @@
 {% extends "base.html" %}
-{%block content%}
+{% block content %}
 
-    <form method="POST" action="{% url 'book-room' %}">
-        {% csrf_token%}
-        <label for="room-number">Room number</label>
-        <input type="text" id="room-number" name="room-number">
+    <h1>Book Room {{ room.number }}</h1>
+    <form method="post" action="{% url 'book_room' %}">
+        {% csrf_token %}
+        
+        <input type="hidden" name="room_id" value="{{ room.id }}">
         <br>
-
-        <label for="start-time">Start time</label>
-        <input type="datetime-local" id="start-time" name="start-time">
+        <label for="start-time">Start Date:</label>
+        <input type="datetime-local" id="start-time" name="start-time" required>
         <br>
-        <label for="end-time">End time</label>
-        <input type="datetime-local" id="end-time" name="end-time">
+        <label for="end-time">End Date:</label>
+        <input type="datetime-local" id="end-time" name="end-time" required>
         <br>
-        <button type="submit">Book this room</button>
-
+        {% if error %}
+            <p style="color:red;">{{ error }}</p>
+        {% endif %}
+        <br>
+        <button type="submit">Book Room</button>
     </form>
+    <a href="{% url 'room_details' room.id %}">Back to Room Details</a>
 
-{%endblock%}
+{% endblock %}
+

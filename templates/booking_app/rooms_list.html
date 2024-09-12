@@ -1,5 +1,19 @@
 {% extends "base.html" %}
 {% block content %}
+        {% if request.user.is_authenticated %}
+            <h3> AUTHENTICATED </h3>
+            {% else %}
+            <h3> UNAUTHENTICATED</h3>
+        {% endif %}
+        {% if user.is_authenticated %}
+            <form id="logout-form" method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Register</a>
+        {% endif %}
         <h1>Available Rooms</h1>
 
         <form method="get" action="{% url 'rooms_list' %}">
@@ -9,24 +23,35 @@
             <label for="end_time">End Date:</label>
             <input type="datetime-local" id="end_time" name="end_time" value="{{ end_time }}" required>
         
+            <label for="filter">Filter:</label>
+            <select id="filter" name="filter">
+                <option value="all" {% if filter_option == 'all' %}selected{% endif %}>Show All Rooms</option>
+                <option value="available" {% if filter_option == 'available' %}selected{% endif %}>Show Available Rooms</option>
+            </select>
+
             <button type="submit">Filter</button>
-            <br>
-            <a href="{% url 'rooms_list' %}?filter=all&start_time={{ start_time }}&end_time={{ end_time }}">Show All Rooms</a> |
-            <a href="{% url 'rooms_list' %}?filter=available&start_time={{ start_time }}&end_time={{ end_time }}">Show Available Rooms</a>
+            
         </form>
 
 
+        {%  if not start_time or not end_time %}
+            <p style="color: red;">Please select start and end dates before viewing room details.</p>
+        {% endif %}
         <h2>Room List</h2>
         <ul>
             {% for room in rooms_list %}
                 <li>
-                    Room {{ room.number }} - 
+                    Room {{ room.number }} - {{ room.capacity }} people - ${{ room.price }}
                     {% if room.is_available %}
                         <span style="color: green;">Available</span>
                     {% else %}
                         <span style="color: red;">Occupied</span>
                     {% endif %}
-                    <a href="{% url 'room_details' room_id=room.id %}">Details</a>
+                    {%  if start_time and end_time %}
+                        <a href="{% url 'room_details' room_id=room.id %}?start_time={{ start_time }}&end_time={{ end_time }}&filter={{ filter_option }}">Details</a>
+                    {% else %}
+                        <a href="{% url 'rooms_list' %}">Details</a>
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>

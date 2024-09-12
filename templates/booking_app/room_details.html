@@ -1,14 +1,40 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>Room number: {{ room.number }}</h1>
-    <p>Capacity: {{ room.capacity }}</p>
-    <p>Price: {{ room.price }}</p>
 
-    {% if room.is_available %}
-        <p>Status: Available</p>
-        <a href="{% url 'book_room' %}?room_id={{ room.id }}">Book this room</a>
+    <h1>Room {{ room.number }} Details</h1>
+    <p>Capacity: {{ room.capacity }} people</p>
+    <p>Price: ${{ room.price }}</p>
+
+    <h3>Booking Details</h3>
+    <ul>
+        {% if bookings %}
+            {% for booking in bookings %}
+                <li>
+                    User: {{ booking.user.username }}<br>
+                    Start Time: {{ booking.start_time }}<br>
+                    End Time: {{ booking.end_time }}<br>
+                    Status: {{ booking.get_status_display }}
+                </li>
+            {% endfor %}
+        {% else %}
+            <li>No bookings in the selected period.</li>
+        {% endif %}
+    </ul>
+
+
+
+    {% if bookings%}
+        <p> Status: Not Available</p>
     {% else %}
-        <p>Status: Not Available</p>
+        <p> Status:Available </p>
+        {% if user.is_authenticated %}
+            <a href="{% url 'book_room' %}?room_id={{ room.id }}">Book this room</a>
+        {% else %}
+            <p>Please <a href="{% url 'login' %}?next={{ request.path }}">log in</a> to book this room.</p>
+        {% endif %}
     {% endif %}
+    
+        
+    <a href="{% url 'rooms_list' %}?start_time={{ request.GET.start_time }}&end_time={{ request.GET.end_time }}&filter={{ request.GET.filter }}">Back to Room List</a>
 
 {% endblock %}

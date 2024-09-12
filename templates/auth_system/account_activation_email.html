@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+
+    <h2>Hi {{ user.first_name }},</h2>
+
+    <h3>Please click the link below to activate your account: </h3>
+
+    <a href="http://{{ domain }}/activate/{{ uid }}/{{ token }}/">Activate your account</a>
+
+    <p>If you did not create an account with us, please disregard this email.</p>
+
+
+
+{% endblock %}

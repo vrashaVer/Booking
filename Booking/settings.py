@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'booking_app',
+    'auth_system',
 ]
 
 MIDDLEWARE = [
@@ -122,3 +123,17 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# AUTH_USER_MODEL = "auth_system.CustomUser"
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'  # або інший поштовий сервіс
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'daria.daria123654@gmail.com'  # Ваша електронна пошта
+# EMAIL_HOST_PASSWORD = 'lk93Vm14'  # Пароль до електронної пошти
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+LOGIN_URL = '/login/'
+LOGOUT_REDIRECT_URL = ' rooms_list'

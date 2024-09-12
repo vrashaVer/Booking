@@ -13,13 +13,15 @@ class Room(models.Model):
     def __str__(self):
         return f"Room №{self.number} - {self.capacity}, price - {self.price}"
     
-    def update_availability(self):
+    def is_available(self):
         now = timezone.now()
-        if Booking.objects.filter(room=self, status='confirmed', start_time__lte=now, end_time__gte=now).exists():
-            self.is_available = False
-        else:
-            self.is_available = True
-        self.save()
+        conflicting_bookings = Booking.objects.filter(
+            room=self,
+            start_time__lt=now,
+            end_time__gt=now,
+            status='confirmed'
+        )
+        return not conflicting_bookings.exists()
 
     class Meta:
         verbose_name = "Room"
@@ -40,17 +42,6 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.room} from {self.start_time} to {self.end_time}"
-
-    def is_available(self):
-        now = timezone.now()
-        if Booking.objects.filter(
-            room=self.room, 
-            status='confirmed', 
-            start_time__lte=now, 
-            end_time__gte=now
-        ).exists():
-            return False
-        return True
     
     class Meta:
         verbose_name = "Booking"

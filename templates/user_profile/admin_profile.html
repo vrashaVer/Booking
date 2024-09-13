@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Admin Profile</h1>
+<p>Welcome, {{ user.username }} (Admin)</p>
+
+<h2>Manage Rooms:</h2>
+<table>
+    <tr>
+        <th>Room Number</th>
+        <th>Capacity</th>
+        <th>Location</th>
+        <th>Price</th>
+
+        <th>Actions</th>
+    </tr>
+    {% for room in rooms %}
+    <tr>
+        <td>{{ room.number }}</td>
+        <td>{{ room.capacity }}</td>
+        <td>{{ room.location }}</td>
+        <td>{{ room.price }}</td>
+        <td>
+            <a href="{% url 'edit_room' room.id %}">Edit</a> |
+            <a href="{% url 'delete_room' room.id %}">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<a href="{% url 'add_room' %}">Add New Room</a>
+
+<h2>Bookings</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Room</th>
+            <th>User</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for booking in bookings %}
+        <tr>
+            <td>{{ booking.room.number }}</td>
+            <td>{{ booking.user.username }}</td>
+            <td>{{ booking.start_time }}</td>
+            <td>{{ booking.end_time }}</td>
+            <td>{{ booking.status }}</td>
+            <td>
+                {% if booking.status == 'confirmed'%}
+                    <form method="POST" action="{% url 'cancel_booking' booking.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Cancel</button>
+                    </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Users</h2>
+<ul>
+    {% for user in users %}
+    <li>
+        <a href="{% url 'user_detail' user.id %}">{{ user.username }}</a>
+    </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'rooms_list' %}">Go back to rooms list</a>
+
+{% endblock %}

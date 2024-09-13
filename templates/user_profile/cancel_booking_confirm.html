@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Confirm Cancellation</h1>
+<p>Are you sure you want to cancel the booking for Room {{ booking.room }} from {{ booking.start_time }} to {{ booking.end_time }}?</p>
+
+<form method="post" action="{% url 'cancel_booking' booking.id %}">
+    {% csrf_token %}
+    <button type="submit">Confirm Cancellation</button>
+    <a href="{% url 'user_profile' %}">Cancel</a>
+</form>
+{% endblock %}

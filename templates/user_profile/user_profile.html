@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>User Profile</h1>
+    <h1>{{ user.username }}'s Profile</h1>
+
+    <p><strong>First Name:</strong> {{ user.first_name }}</p>
+    <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+
+    <h2>Your Bookings</h2>
+    {% if bookings %}
+    <ul>
+        {% for booking in bookings %}
+        <li>
+            <strong>Room number:</strong> {{ booking.room }} <br>
+            <strong>Capacity:</strong> {{ booking.room.capacity }} <br>
+            <strong>Start Date:</strong> {{ booking.start_time }} <br>
+            <strong>End Date:</strong> {{ booking.end_time }} <br>
+            <strong>Status:</strong> {{ booking.status }} <br>
+
+            <!-- Cancel booking button for the user -->
+            {% if booking.status == 'confirmed'%}
+                <form method="POST" action="{% url 'cancel_booking' booking.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Cancel Booking</button>
+                </form>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>You have no bookings.</p>
+    {% endif %}
+    <a href="{% url 'rooms_list' %}">Go back to rooms list</a>
+{% endblock %}

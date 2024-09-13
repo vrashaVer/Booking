@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>User Profile: {{ user.username }}</h1>
+
+<p><strong>First Name:</strong> {{ user.first_name }}</p>
+<p><strong>Last Name:</strong> {{ user.last_name }}</p>
+<p><strong>Email:</strong> {{ user.email }}</p>
+
+<h2>Bookings:</h2>
+
+{% if bookings %}
+    <ul>
+        {% for booking in bookings %}
+        <li>
+            <strong>Room:</strong> {{ booking.room }} <br>
+            <strong>Start Date:</strong> {{ booking.start_time }} <br>
+            <strong>End Date:</strong> {{ booking.end_time }} <br>
+            <strong>Status:</strong> {{ booking.status }} <br>
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No bookings.</p>
+{% endif %}
+
+{% endblock %}

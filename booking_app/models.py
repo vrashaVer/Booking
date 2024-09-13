@@ -11,9 +11,9 @@ class Room(models.Model):
 
     
     def __str__(self):
-        return f"Room №{self.number} - {self.capacity}, price - {self.price}"
+        return f"{self.number} "
     
-    def is_available(self):
+    def check_availability(self):
         now = timezone.now()
         conflicting_bookings = Booking.objects.filter(
             room=self,

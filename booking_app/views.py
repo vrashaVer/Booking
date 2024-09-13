@@ -103,7 +103,7 @@ def book_room(request):
             end_time = end_time,
             status='confirmed'
         ).save()
-        room.is_available()
+        room.check_availability()
         return redirect('booking_success')
     
     else :
@@ -121,7 +121,10 @@ def room_details(request,room_id):
     start_time = request.GET.get('start-time')
     end_time = request.GET.get('end-time')
 
-    bookings = Booking.objects.filter(room=room).order_by('-start_time')
+    bookings = Booking.objects.filter(
+        room=room,
+        status='confirmed'
+    ).order_by('-start_time')
     
     if start_time and end_time:
         try:
@@ -138,8 +141,6 @@ def room_details(request,room_id):
         except ValueError:
             room.is_available = True
 
-
-
     context = {
         'room': room,
         'bookings': bookings,
@@ -152,3 +153,4 @@ def room_details(request,room_id):
     
 def booking_success(request):
     return render(request, template_name="booking_app/booking_success.html")
+

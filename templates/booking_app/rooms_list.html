@@ -1,19 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-        {% if request.user.is_authenticated %}
-            <h3> AUTHENTICATED </h3>
-            {% else %}
-            <h3> UNAUTHENTICATED</h3>
-        {% endif %}
-        {% if user.is_authenticated %}
-            <form id="logout-form" method="post" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit">Logout</button>
-            </form>
-        {% else %}
-            <a href="{% url 'login' %}">Login</a>
-            <a href="{% url 'register' %}">Register</a>
-        {% endif %}
+
         <h1>Available Rooms</h1>
 
         <form method="get" action="{% url 'rooms_list' %}">

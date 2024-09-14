@@ -1,76 +1,86 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="container d-flex flex-column align-items-center my-5">
+    <div class="col-lg-10 col-md-12">
+        <h1 class="mb-4">Admin Profile</h1>
+        <p class="text">Welcome, <strong>{{ user.username }}</strong> (Admin)</p>
 
-<h1>Admin Profile</h1>
-<p>Welcome, {{ user.username }} (Admin)</p>
+        <h2 class="mb-3 text-">Manage Rooms:</h2>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Room Number</th>
+                        <th>Capacity</th>
+                        <th>Location</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
 
-<h2>Manage Rooms:</h2>
-<table>
-    <tr>
-        <th>Room Number</th>
-        <th>Capacity</th>
-        <th>Location</th>
-        <th>Price</th>
+                </thead>
+                <tbody>
+                    {% for room in rooms %}
+                    <tr>
+                        <td>{{ room.number }}</td>
+                        <td>{{ room.capacity }}</td>
+                        <td>{{ room.location }}</td>
+                        <td>${{ room.price }}</td>
+                        <td class="text-center">
+                            <a href="{% url 'edit_room' room.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                            <a href="{% url 'delete_room' room.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this room?');">Delete</a>
+                            <!-- <a href="{% url 'delete_room' room.id %}" class="btn btn-sm btn-outline-danger">Delete</a> -->
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <a href="{% url 'add_room' %}" class="btn btn-success mb-4">Add New Room</a>
 
-        <th>Actions</th>
-    </tr>
-    {% for room in rooms %}
-    <tr>
-        <td>{{ room.number }}</td>
-        <td>{{ room.capacity }}</td>
-        <td>{{ room.location }}</td>
-        <td>{{ room.price }}</td>
-        <td>
-            <a href="{% url 'edit_room' room.id %}">Edit</a> |
-            <a href="{% url 'delete_room' room.id %}">Delete</a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-
-<a href="{% url 'add_room' %}">Add New Room</a>
-
-<h2>Bookings</h2>
-<table>
-    <thead>
-        <tr>
-            <th>Room</th>
-            <th>User</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for booking in bookings %}
-        <tr>
-            <td>{{ booking.room.number }}</td>
-            <td>{{ booking.user.username }}</td>
-            <td>{{ booking.start_time }}</td>
-            <td>{{ booking.end_time }}</td>
-            <td>{{ booking.status }}</td>
-            <td>
-                {% if booking.status == 'confirmed'%}
-                    <form method="POST" action="{% url 'cancel_booking' booking.id %}">
-                        {% csrf_token %}
-                        <button type="submit">Cancel</button>
-                    </form>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-<h2>Users</h2>
-<ul>
-    {% for user in users %}
-    <li>
-        <a href="{% url 'user_detail' user.id %}">{{ user.username }}</a>
-    </li>
-    {% endfor %}
-</ul>
-<a href="{% url 'rooms_list' %}">Go back to rooms list</a>
-
+        <h2 class="mb-3">Bookings</h2>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Room</th>
+                        <th>User</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.room.number }}</td>
+                        <td>{{ booking.user.username }}</td>
+                        <td>{{ booking.start_time }}</td>
+                        <td>{{ booking.end_time }}</td>
+                        <td>{{ booking.status }}</td>
+                        <td>
+                            {% if booking.status == 'confirmed'%}
+                                <form method="POST" action="{% url 'cancel_booking' booking.id %}" onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <h2 class="mb-3">Users</h2>
+        <ul class="list-group mb-4">
+            {% for user in users %}
+            <li class="list-group-item " >
+                <a href="{% url 'user_detail' user.id %}" class="text-decoration-none">{{ user.username }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'rooms_list' %}" class="btn btn-secondary">Go back to rooms list</a>
+    </div>
+</div>
 {% endblock %}

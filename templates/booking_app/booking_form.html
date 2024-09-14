@@ -1,25 +1,39 @@
 {% extends "base.html" %}
 {% block content %}
+<div class="container d-flex flex-column align-items-center my-5"style="border: 1px solid #000000; border-radius: 8px; padding: 10px; background-color: #f8f9fa; width: 700px;">
+    <div class="container my-5">
 
-    <h1>Book Room {{ room.number }}</h1>
-    <form method="post" action="{% url 'book_room' %}">
-        {% csrf_token %}
+        <h1 class="mb-4 text-center">Book Room {{ room.number }}</h1>
+        <form method="post" action="{% url 'book_room' %}" class="col-md-6 mx-auto">
+            {% csrf_token %}
+            
+            <input type="hidden" name="room_id" value="{{ room.id }}">
+            
+            <div class="mb-3">
+            <label for="start-time">Start Date:</label>
+            <input type="datetime-local" id="start-time" name="start-time" required>
+            </div>
+
+            <div class="mb-3">
+            <label for="end-time">End Date:</label>
+            <input type="datetime-local" id="end-time" name="end-time" required>
+            </div>
         
-        <input type="hidden" name="room_id" value="{{ room.id }}">
-        <br>
-        <label for="start-time">Start Date:</label>
-        <input type="datetime-local" id="start-time" name="start-time" required>
-        <br>
-        <label for="end-time">End Date:</label>
-        <input type="datetime-local" id="end-time" name="end-time" required>
-        <br>
-        {% if error %}
-            <p style="color:red;">{{ error }}</p>
-        {% endif %}
-        <br>
-        <button type="submit">Confirm Booking</button>
-    </form>
-    <a href="{% url 'room_details' room.id %}">Back to Room Details</a>
-
+            {% if error %}
+            
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+            {% endif %}
+            
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success">Confirm Booking</button>
+            </div>    
+        </form>
+        <div class="text-center mt-3">
+            <a href="{% url 'room_details' room.id %}" class="btn btn-secondary">Back to Room Details</a>
+        </div>
+    </div>
+</div>
 {% endblock %}
 

@@ -1,11 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
-    <h2>Register</h2>
-    <form method="post" action="{% url 'register' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" >Register</button>
-    </form>
-    <a href="{% url 'login' %}">Login</a>
+<div class="container my-5">
+    <div class="col-lg-6 mx-auto">
+        <h2 class="mb-4 text-center">Register</h2>
+        <form method="post" action="{% url 'register' %}" class="needs-validation" novalidate>
+            {% csrf_token %}
+            
+            {{ form.as_p }}
+            <div class="mt-3" style="display: flex;align-items: center;justify-content: center">
+                <div class="col-md-5 d-grid">
+                    <button type="submit" class="btn btn-primary" style="background-color: black; border-color: black;">Register</button>
+                </div>
+            </div>
+    
+        </form>
+        <div class="text-center mt-3">
+            <a href="{% url 'login' %}" class="btn btn-link">Already have an account? Login</a>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

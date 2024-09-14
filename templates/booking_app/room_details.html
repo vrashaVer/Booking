@@ -1,42 +1,68 @@
 {% extends "base.html" %}
 {% block content %}
+<div class="container my-5">
+    <div class="row">
+        <!-- Room Information -->
+        <div class="col-lg-8 mx-auto">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h1 class="card-title mb-3">Room {{ room.number }} Details</h1>
+                    <div class="mb-3">
+                        <p class="mb-1"><strong>Capacity:</strong> {{ room.capacity }} people</p>
+                        <p class="mb-1"><strong>Price:</strong> ${{ room.price }}</p>
+                        <p class="mb-1"><strong>Location:</strong> {{ room.location }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <h1>Room {{ room.number }} Details</h1>
-    <p>Capacity: {{ room.capacity }} people</p>
-    <p>Price: ${{ room.price }}</p>
-
-    <h3>Booking Details</h3>
-    <ul>
-        {% if bookings %}
-            {% for booking in bookings %}
-  
-                    <li>
-                        User: {{ booking.user.username }}<br>
-                        Start Time: {{ booking.start_time }}<br>
-                        End Time: {{ booking.end_time }}<br>
-                        Status: {{ booking.get_status_display }}
-                    </li>
- 
-            {% endfor %}
-        {% else %}
-            <li>No bookings in the selected period.</li>
-        {% endif %}
-    </ul>
-
-
-
-    {% if bookings %}
-        <p> Status: Not Available</p>
-    {% else %}
-        <p> Status:Available </p>
-        {% if user.is_authenticated %}
-            <a href="{% url 'book_room' %}?room_id={{ room.id }}">Book this room</a>
-        {% else %}
-            <p>Please <a href="{% url 'login' %}?next={{ request.path }}">log in</a> to book this room.</p>
-        {% endif %}
-    {% endif %}
-    
-        
-    <a href="{% url 'rooms_list' %}?start_time={{ request.GET.start_time }}&end_time={{ request.GET.end_time }}&filter={{ request.GET.filter }}">Back to Room List</a>
-
+        <div class="col-lg-8 mx-auto">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title mb-3">Booking Details</h3>
+                    <ul class="list-group">
+                        {% if bookings %}
+                            {% for booking in bookings %}
+                                <li class="list-group-item">
+                                    <strong>User:</strong> {{ booking.user.username }}<br>
+                                    <strong>Start Time:</strong> {{ booking.start_time }}<br>
+                                    <strong>End Time:</strong> {{ booking.end_time }}<br>
+                                    <strong>Status:</strong> 
+                                    {% if booking.status == 'confirmed' %}
+                                        <span class="text-success">{{ booking.get_status_display }}</span>
+                                    {% else %}
+                                        <span class="text-danger">{{ booking.get_status_display }}</span>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li class="list-group-item">No bookings in the selected period.</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 mx-auto">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body text-center">
+                    {% if bookings %}
+                        <p class="alert alert-danger" role="alert"> Status: Not Available</p>
+                    {% else %}
+                        <p class="alert alert-success" role="alert"> Status:Available </p>
+                    {% endif %}    
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'book_room' %}?room_id={{ room.id }}" class="btn btn-primary  mb-3">Book this room</a>
+                    {% else %}
+                        <p>Please <a href="{% url 'login' %}?next={{ request.path }}">log in</a> to book this room.</p>
+                    
+                    {% endif %}
+                    
+                    <div class="d-flex justify-content-center">
+                        <a href="{% url 'rooms_list' %}?start_time={{ request.GET.start_time }}&end_time={{ request.GET.end_time }}&filter={{ request.GET.filter }}" class="btn btn-secondary">Back to Room List</a>
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

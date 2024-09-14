@@ -1,49 +1,64 @@
 {% extends "base.html" %}
 {% block content %}
 
-        <h1>Available Rooms</h1>
-
-        <form method="get" action="{% url 'rooms_list' %}">
-            <label for="start_time">Start Date:</label>
-            <input type="datetime-local" id="start_time" name="start_time" value="{{ start_time }}" required>
-        
-            <label for="end_time">End Date:</label>
-            <input type="datetime-local" id="end_time" name="end_time" value="{{ end_time }}" required>
-        
-            <label for="filter">Filter:</label>
-            <select id="filter" name="filter">
-                <option value="all" {% if filter_option == 'all' %}selected{% endif %}>Show All Rooms</option>
-                <option value="available" {% if filter_option == 'available' %}selected{% endif %}>Show Available Rooms</option>
-            </select>
-
-            <button type="submit">Filter</button>
-            
+    
+    <div class="container my-5">
+        <h1 class="my-4">Available Rooms</h1>
+        <form method="get" action="{% url 'rooms_list' %}" class="w-75">
+            <div class="row g-3 justify-content mb-4" >
+                <div class="col-md-4">
+                    <label for="start_time">Start Date:</label>
+                    <input type="datetime-local" id="start_time" name="start_time" class="form-control " value="{{ start_time }}" required>
+                </div>
+    
+                <div class="form-group col-md-4">
+                    <label for="end_time">End Date:</label>
+                    <input type="datetime-local" id="end_time" name="end_time" class="form-control " value="{{ end_time }}" required>
+                </div>
+                <div class="col-md-12 mb-3">
+                   
+                        <label for="filter" class="form-label" style="padding-right: 20px;">Filter:</label>
+                        <select id="filter" name="filter" class="form-select" style="width: 100%; max-width: 400px;">
+                            <option value="all" {% if filter_option == 'all' %}selected{% endif %}>Show All Rooms</option>
+                            <option value="available" {% if filter_option == 'available' %}selected{% endif %}>Show Available Rooms</option>
+                        </select>
+                </div>
+            </div>
+            <div class="row justify-content-left" style="padding-left: 240px;">
+                <div class="col-md-3 d-grid">
+                    <button type="submit" class="btn btn-primary" style="background-color: black; border-color: black;">Filter</button>
+                </div>
+            </div>
         </form>
 
 
         {%  if not start_time or not end_time %}
-            <p style="color: red;">Please select start and end dates before viewing room details.</p>
+            <p class="text-danger mt-3"><b>Please select start and end dates before viewing room details.</b></p>
         {% endif %}
-        <h2>Room List</h2>
-        <ul>
+        <h2 class="my-4">Room List</h2>
+        <ul class="list-group w-75 mb-4">
             {% for room in rooms_list %}
-                <li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
                     Room {{ room.number }} - {{ room.capacity }} people - ${{ room.price }}
+                    <span>
                     {% if room.is_available %}
-                        <span style="color: green;">Available</span>
+                        <span class="badge bg-success">Available</span>
                     {% else %}
-                        <span style="color: red;">Occupied</span>
+                        <span class="badge bg-danger">Occupied</span>
                     {% endif %}
                     {%  if start_time and end_time %}
-                        <a href="{% url 'room_details' room_id=room.id %}?start_time={{ start_time }}&end_time={{ end_time }}&filter={{ filter_option }}">Details</a>
+                        <a href="{% url 'room_details' room_id=room.id %}?start_time={{ start_time }}&end_time={{ end_time }}&filter={{ filter_option }}" class="btn btn-link">Details</a>
                     {% else %}
-                        <a href="{% url 'rooms_list' %}">Details</a>
+                        <a href="{% url 'rooms_list' %}" class="btn btn-link">Details</a>
                     {% endif %}
+                    </span>
                 </li>
             {% endfor %}
         </ul>
         {% if not rooms_list %}
-            <p>No rooms available for the selected period.</p>
+            <p class="text-center text-danger"><b>No rooms available for the selected period.</b></p>
         {% endif %}
     
+    </div>
+
 {% endblock %}

@@ -1,27 +1,39 @@
 {% extends "base.html" %}
 {% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">User Profile: {{ user.username }}</h1>
 
-<h1>User Profile: {{ user.username }}</h1>
+    <div class="mb-3">
+        <p><strong>First Name:</strong> {{ user.first_name }}</p>
+        <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+    </div>
 
-<p><strong>First Name:</strong> {{ user.first_name }}</p>
-<p><strong>Last Name:</strong> {{ user.last_name }}</p>
-<p><strong>Email:</strong> {{ user.email }}</p>
+    <h2 class="mb-3">Bookings:</h2>
 
-<h2>Bookings:</h2>
+    {% if bookings %}
+        <ul class="list-group">
+            {% for booking in bookings %}
+            <li class="list-group-item mb-3">
+                <strong>Room:</strong> {{ booking.room }} <br>
+                <strong>Start Date:</strong> {{ booking.start_time }} <br>
+                <strong>End Date:</strong> {{ booking.end_time }} <br>
+                <strong>Status:</strong> {{ booking.status }} <br>
 
-{% if bookings %}
-    <ul>
-        {% for booking in bookings %}
-        <li>
-            <strong>Room:</strong> {{ booking.room }} <br>
-            <strong>Start Date:</strong> {{ booking.start_time }} <br>
-            <strong>End Date:</strong> {{ booking.end_time }} <br>
-            <strong>Status:</strong> {{ booking.status }} <br>
-        </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No bookings.</p>
-{% endif %}
+                {% if booking.status == 'confirmed'%}
+                    <form method="POST" action="{% url 'cancel_booking' booking.id %}" class="mt-2">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Cancel Booking</button>
+                    </form>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No bookings.</p>
+    {% endif %}
 
+    <a href="{% url 'user_profile' %}" class="btn btn-secondary mt-2">Back to Profile</a>
+    <br><br>
+</div>
 {% endblock %}

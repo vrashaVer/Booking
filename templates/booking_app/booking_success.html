@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <h1>Booking Successful!</h1>
-    <p>Your booking has been successfully confirmed.</p>
-    <a href="{% url 'rooms_list' %}">Go back to rooms list</a>
+<div class="container my-5 text-center">
+    <div class="card-body">
+        <h1 class="mb-4 text-success">Booking Successful!</h1>
+        <p class="mb-4">Your booking has been successfully confirmed.</p>
 
+        <a href="{% url 'rooms_list' %}" class="btn btn-primary">Go back to rooms list</a>
+    </div>
+</div>
 {% endblock %}

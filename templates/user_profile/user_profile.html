@@ -1,36 +1,53 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>User Profile</h1>
-    <h1>{{ user.username }}'s Profile</h1>
+<div class="container d-flex flex-column align-items-center my-5">
+        <div class="col-lg-10 col-md-12">
 
-    <p><strong>First Name:</strong> {{ user.first_name }}</p>
-    <p><strong>Last Name:</strong> {{ user.last_name }}</p>
-    <p><strong>Email:</strong> {{ user.email }}</p>
+            <h1 class="mb-4">{{ user.username }} Profile</h1>
+            <div class="container border border-dark rounded p-4 mb-4" style="background-color:#f8f9fa ;" >
+                <h2 class="h4 mb-3">User Information</h2>
+                <p><strong>Username:</strong>{{ user.username }}</p>
+                <p><strong>First Name:</strong> {{ user.first_name }}</p>
+                <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+            </div>
+                <h2 class="mb-3 text-center">Your Bookings</h2>
+                {% if bookings %}
+                <ul class="list-group mb-4">
+                    {% for booking in bookings %}
+                    <li class="list-group-item mb-3 border rounded">
+                        <div>
+                            <strong>Room number:</strong> {{ booking.room }} <br>
+                            <strong>Capacity:</strong> {{ booking.room.capacity }} <br>
+                            <strong>Start Date:</strong> {{ booking.start_time }} <br>
+                            <strong>End Date:</strong> {{ booking.end_time }} <br>
+                            {% if booking.status == 'confirmed'%}
+                                <strong>Status:</strong> <b><span class="text-success">{{ booking.status }} </b><br>
+                            {% else %}
+                                <strong>Status:</strong> <b><span class="text-danger">{{ booking.status }} </b><br>
+                            {% endif %}
+                            
+                        </div>
+                        
 
-    <h2>Your Bookings</h2>
-    {% if bookings %}
-    <ul>
-        {% for booking in bookings %}
-        <li>
-            <strong>Room number:</strong> {{ booking.room }} <br>
-            <strong>Capacity:</strong> {{ booking.room.capacity }} <br>
-            <strong>Start Date:</strong> {{ booking.start_time }} <br>
-            <strong>End Date:</strong> {{ booking.end_time }} <br>
-            <strong>Status:</strong> {{ booking.status }} <br>
-
-            <!-- Cancel booking button for the user -->
-            {% if booking.status == 'confirmed'%}
-                <form method="POST" action="{% url 'cancel_booking' booking.id %}">
-                    {% csrf_token %}
-                    <button type="submit">Cancel Booking</button>
-                </form>
-            {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
-    {% else %}
-        <p>You have no bookings.</p>
-    {% endif %}
-    <a href="{% url 'rooms_list' %}">Go back to rooms list</a>
+                        {% if booking.status == 'confirmed'%}
+                            <!-- <form method="POST" action="{% url 'cancel_booking' booking.id %}" class="mt-2">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Cancel Booking</button>
+                            </form> -->
+                            <form method="POST" action="{% url 'cancel_booking' booking.id %}" class="mt-2" onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Cancel Booking</button>
+                            </form>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                    <p class="text-center">You have no bookings.</p>
+                {% endif %}
+                <a href="{% url 'rooms_list' %}" class="btn btn-secondary d-block mx-auto mt-3">Go back to rooms list</a>
+        </div>
+</div>
 {% endblock %}

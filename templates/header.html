@@ -1,14 +1,24 @@
-<h1>BOOKING SYSTEM</h1>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="height: 125px;" style="width: 100%; padding-left: 20px; padding-right: 20px;">
+<div class="container-fluid">
+
+
+    <h1 class="display-4" style="width:70%; padding-left: 50px;" >BOOKING SYSTEM</h1>
 
 {% if user.is_authenticated %}
-        
-    <form id="logout-form" method="post" action="{% url 'logout' %}">
+    <div style="display: flex; align-items: center; justify-content: flex-end; width: 20%;">
+    <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: flex; align-items: center; justify-content: space-between; width: 20%;">
         {% csrf_token %}
-        <a href="{% url 'user_profile' %}">Profile</a>
-        <button type="submit">Logout</button>
+        <a class="nav-link" href="{% url 'user_profile' %}"  style="color: #000000;; font-size: 1.2rem; text-decoration: none;">Profile</a>
+        <button type="submit" class="btn btn-outline-danger btn-sm" style="margin-left: 10px;">Logout</button>
     </form>
+    </div>
 {% else %}
-    <a href="{% url 'login' %}">Login</a>
-    <a href="{% url 'register' %}">Register</a>
+<div style="display: flex; align-items: center; justify-content: flex-end; width: 20%;"></div>
+    <a class="stretched-link" href="{% url 'login' %}" style="color: #ff0000; font-size: 1.2rem; ">Login</a>
+    <a class="nav-link" href="{% url 'register' %}" style="color: #000000;; font-size: 1.2rem;">Register</a>
+</div>
 {% endif %}
+
 <hr>
+</div>
+</nav>  

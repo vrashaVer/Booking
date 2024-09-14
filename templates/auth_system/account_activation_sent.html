@@ -2,7 +2,16 @@
 {% block content %}
 
 
-    <h2>Account Activation</h2>
-    <p>Please check your email for a confirmation link to complete the registration process.</p>
+<div class="container my-5">
+    <div class="col-lg-6 mx-auto">
+        <div class="card shadow-sm text-center">
+            <div class="card-body">
+                <h2 class="mb-4 text-primary">Account Activation</h2>
+                <p class="mb-4">Please check your email for a confirmation link to complete the registration process.</p>
+                <a href="{% url 'login' %}" class="btn btn-primary">Go to Login</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

@@ -1,11 +1,43 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Edit Room</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save Changes</button>
-    <a href="{% url 'user_profile' %}">Cancel</a>
-</form>
+
+<div class="container mt-5">
+
+    <h1 class="text-center mb-4">Edit Room</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="post"  class="p-4 border rounded shadow">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    {{ form.number.label_tag }}
+                    {{ form.number }}
+                </div>
+                <div class="mb-3">
+                    {{ form.capacity.label_tag }}
+                    {{ form.capacity }}
+                </div>
+                <div class="mb-3">
+                    {{ form.location.label_tag }}
+                    {{ form.location }}
+                </div>
+                <div class="mb-3">
+                    {{ form.price.label_tag }}
+                    {{ form.price }}
+                </div>
+                <div class="form-check mb-3">
+                    {{ form.is_available.label_tag }}
+                    {{ form.is_available }}
+                </div>
+
+                <div class="d-flex justify-content-center mt-4">
+                    <button type="submit" class="btn btn-success btn-sm px-4">Save Changes</button>
+                    <a href="{% url 'user_profile' %}" class="btn btn-secondary btn-sm px-4 ms-3">Cancel</a>
+                </div>
+              
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
